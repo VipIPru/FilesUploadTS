@@ -16,11 +16,24 @@ const InputItem: FC = () => {
     }
 
     const uploadMultipleFiles = () => {
+        if (!allFiles[0]) {
+            alert("Нужно выбрать файл")
+            return
+        }
 
         let uploadedFiles = allFiles;
         let files = [];
+        const RashireniaPhoto = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".tif", ".raw", ".psd", ".webp", ".heic"];
 
-        for (let i = 0; i < uploadedFiles.length; i++) files.push({ name: uploadedFiles[i].name })
+        for (let i = 0; i < uploadedFiles.length; i++) {
+            let status = false;
+            for (let j = 0; j < RashireniaPhoto.length; j++) {
+                if (uploadedFiles[i].name.includes(RashireniaPhoto[j])) {
+                    status = true;
+                }
+            }
+            if (status) files.push({ name: uploadedFiles[i].name })
+        }
 
         axios({
             url: "http://localhost:8000/api/uploadFile",
